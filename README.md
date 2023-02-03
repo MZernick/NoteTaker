@@ -1,6 +1,6 @@
 # UTA--Bootcamp-NoteTaker
 
-# Collaboarters
+# Collaboraters
 
  Stephen Totten
 
