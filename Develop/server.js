@@ -1,8 +1,14 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
 //const { clog } = require('./middleware/clog');
 //const api = require('./public/assets/js/index.js');
+const {
+    readFromFile,
+    readAndAppend,
+    writeToFile,
+  } = require('./helpers/fsUtils');
 
 const PORT = process.env.PORT || 3001;
 
@@ -39,23 +45,49 @@ app.post('/api/notes', (req, res) => {
     const { title, text } = req.body;
     if (req.body) {
         const newNote = {
+            id: uuidv4(),
             title,
             text,
         };
-        const noteString = JSON.stringify(newNote);
-        fs.readFile(noteString, 'utf8', (err, data) => {
+         fs.readFile('./db/db.json', 'utf8', (err, data) => {
             if (err) {
-                console.error(err);
+              console.error(err);
             } else {
-                const parsedData = JSON.parse(data);
-                parsedData.push(content);
-                fs.writeFile('./db/db.json', JSON.stringify(content, null, 4), (err) =>
-                    err ? console.error(err) : console.info(`Data written to db.json`)
-                );
+              const parsedData = JSON.parse(data);
+              parsedData.push(newNote);
+              console.log(parsedData);
+              const noteString = JSON.stringify(parsedData);
+              fs.writeFile(`./db/db.json`, noteString, (err) =>
+              err
+                ? console.error(err)
+                : console.log(
+                    `A new note has been written to the JSON file`,
+                  )
+            );
             }
-        });
-    }
-});
+          });
+
+      
+        //Attempt2
+    //     readAndAppend(newNote, './db/db.json');
+    //     res.json(`Tip added successfully 🚀`);
+    //   } else {
+    //     res.error('Error in adding tip');
+    //   }
+        //attempt1
+        // const noteString = JSON.stringify(newNote);
+    //     fs.readFile('./db/db.json', 'utf8', (err, data) => {
+    //         if (err) {
+    //             console.error(err);
+    //         } else {
+    //             const parsedData = JSON.parse(data);
+    //             parsedData.push(noteString);
+    //             fs.writeFile('./db/db.json', JSON.stringify(noteString, null, 4), (err) =>
+    //                 err ? console.error(err) : console.info(`Data written to db.json`)
+    //             );
+    //         }
+    // });
+}});
 
 // Wildcard route to direct users back to home page
 app.get('*', (req, res) =>
