@@ -4,11 +4,6 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 //const { clog } = require('./middleware/clog');
 //const api = require('./public/assets/js/index.js');
-const {
-    readFromFile,
-    readAndAppend,
-    writeToFile,
-  } = require('./helpers/fsUtils');
 
 const PORT = process.env.PORT || 3001;
 
@@ -91,7 +86,7 @@ app.post('/api/notes', (req, res) => {
 
 // Wildcard route to direct users back to home page
 app.get('*', (req, res) =>
-    res.sendFile(path.join(__dirname, 'public/index.html'))
+    res.sendFile(path.join(__dirname, '/index.html'))
 );
 
 app.listen(PORT, () =>
