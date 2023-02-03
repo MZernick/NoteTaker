@@ -40,7 +40,7 @@ const saveNote = (note) =>
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(note),
-  },window.location.reload()
+  }
   );
 
 const deleteNote = (id) =>
